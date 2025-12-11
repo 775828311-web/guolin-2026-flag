@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026国林人梦想启航站</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Microsoft YaHei', sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .title {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #FF6B6B, #4ECDC4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .flag-input {
+            margin: 25px 0;
+        }
+        
+        .category-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .tag {
+            padding: 8px 15px;
+            background: #f0f7ff;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tag:hover {
+            background: #4A90E2;
+            color: white;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            resize: none;
+            transition: border 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #4A90E2;
+        }
+        
+        .power-ups {
+            margin: 25px 0;
+        }
+        
+        .power-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .power-card {
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .power-card.selected {
+            border-color: #4ECDC4;
+            background: #f0fffd;
+            transform: translateY(-5px);
+        }
+        
+        .power-icon {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(90deg, #FF6B6B, #FF8E53);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin-top: 30px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .poster-preview {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .poster {
+            max-width: 300px;
+            margin: 0 auto;
+            padding: 30px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            position: relative;
+        }
+        
+        .share-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .share-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .download {
+            background: #4A90E2;
+            color: white;
+        }
+        
+        .share {
+            background: #50C878;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+        <!-- 页面1：创建Flag -->
+        <div id="page1">
+            <div class="header">
+                <h1 class="title">🚀2026国林人梦想启航站</h1>
+                <p class="subtitle">立下你的新年Flag，与伙伴共勉！</p>
+            </div>
+            
+            <div class="flag-input">
+                <h3>我的2026目标：</h3>
+                <div class="category-tags">
+                    <div class="tag" onclick="fillTemplate('工作成长')">💼 工作</div>
+                    <div class="tag" onclick="fillTemplate('健康生活')">🏃 健康</div>
+                    <div class="tag" onclick="fillTemplate('学习提升')">📚 学习</div>
+                    <div class="tag" onclick="fillTemplate('财富规划')">💰 财富</div>
+                </div>
+                <textarea id="flagText" placeholder="例如：我要完成3个重要项目，带领团队业绩增长30%..."></textarea>
+                <p style="color: #999; font-size: 14px; margin-top: 5px;">已输入：<span id="charCount">0</span>/100字</p>
+            </div>
+            
+            <div class="power-ups">
+                <h3>选择能量加持：</h3>
+                <div class="power-grid">
+                    <div class="power-card" onclick="selectPower(this)">
+                        <div class="power-icon">🏆</div>
+                        <p>毅力奖杯</p>
+                    </div>
+                    <div class="power-card" onclick="selectPower(this)">
+                        <div class="power-icon">⚡</div>
+                        <p>效率闪电</p>
+                    </div>
+                    <div class="power-card" onclick="selectPower(this)">
+                        <div class="power-icon">🤝</div>
+                        <p>团队Buff</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn" onclick="generatePoster()">生成我的Flag宣言</button>
+        </div>
+        
+        <!-- 页面2：海报生成 -->
+        <div id="page2" style="display: none;">
+            <div class="header">
+                <h1 class="title">🎉 你的Flag已立下！</h1>
+                <p class="subtitle">长按保存海报，分享给伙伴们吧</p>
+            </div>
+            
+            <div class="poster" id="posterContent">
+                <!-- 海报内容由JS动态生成 -->
+            </div>
+            
+            <div class="share-buttons">
+                <button class="share-btn download" onclick="downloadPoster()">💾 保存海报</button>
+                <button class="share-btn share" onclick="shareFlag()">🌟 分享Flag</button>
+            </div>
+            
+            <button class="btn" style="background: #999; margin-top: 15px;" onclick="goBack()">再立一个Flag</button>
+        </div>
+    </div>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script>
+        // 页面切换
+        function showPage(pageNum) {
+            document.getElementById('page1').style.display = pageNum === 1 ? 'block' : 'none';
+            document.getElementById('page2').style.display = pageNum === 2 ? 'block' : 'none';
+        }
+        
+        // 字数统计
+        document.getElementById('flagText').addEventListener('input', function() {
+            document.getElementById('charCount').textContent = this.value.length;
+        });
+        
+        // 填充模板
+        function fillTemplate(type) {
+            const templates = {
+                '工作成长': '我要主导一个重要项目，提升团队效率30%',
+                '健康生活': '坚持每周运动3次，完成一次半程马拉松',
+                '学习提升': '掌握一项新技能，读完24本书',
+                '财富规划': '制定储蓄计划，学习投资理财知识'
+            };
+            document.getElementById('flagText').value = templates[type];
+            document.getElementById('charCount').textContent = templates[type].length;
+        }
+        
+        // 选择能量
+        let selectedPower = '🏆 毅力奖杯';
+        function selectPower(element) {
+            document.querySelectorAll('.power-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedPower = element.querySelector('p').textContent;
+        }
+        
+        // 生成海报
+        function generatePoster() {
+            const flag = document.getElementById('flagText').value;
+            if (!flag.trim()) {
+                alert('请先写下你的新年Flag！');
+                return;
+            }
+            
+            // 生成海报HTML
+            const poster = document.getElementById('posterContent');
+            poster.innerHTML = `
+                <div style="text-align: center;">
+                    <h2 style="color: #FF6B6B; margin-bottom: 20px;">🎯 我的2026 Flag</h2>
+                    <div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #4ECDC4;">
+                        <p style="font-size: 18px; line-height: 1.6;">"${flag}"</p>
+                    </div>
+                    <div style="margin: 20px 0;">
+                        <p style="color: #666;">能量加持：${selectedPower}</p>
+                        <p style="color: #666;">立旗时间：${new Date().toLocaleDateString()}</p>
+                    </div>
+                    <div style="border-top: 1px dashed #ddd; padding-top: 15px;">
+                        <p style="color: #999; font-size: 14px;">2026国林人梦想启航计划</p>
+                        <p style="color: #4A90E2; font-weight: bold; margin-top: 15px;">国林GUOLIN</p>
+                    </div>
+                </div>
+            `;
+            
+            showPage(2);
+        }
+        
+        // 下载海报
+        function downloadPoster() {
+            html2canvas(document.getElementById('posterContent')).then(canvas => {
+                const link = document.createElement('a');
+                link.download = '我的2026 Flag宣言.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+        
+        // 分享功能
+        function shareFlag() {
+            const flag = document.getElementById('flagText').value;
+            const text = `我刚刚立下了2026年的Flag：${flag.substring(0, 50)}... 你也快来加入国林GUOLIN的梦想启航计划吧！`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '我的2026新年Flag',
+                    text: text,
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('分享文案已复制到剪贴板！快去粘贴分享吧~');
+                });
+            }
+        }
+        
+        // 返回
+        function goBack() {
+            showPage(1);
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 默认选择一个能量
+            document.querySelector('.power-card').click();
+        });
+    </script>
+</body>
+</html>
